@@ -42,6 +42,7 @@ jobs:
           eval $(ssh-agent -s)
           ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
           ssh-add -l
+          docker -H ssh://ec2-user@arm.d.cron.eu info
 
           # Append the arm node to the builder
           docker buildx create --append --name ${{ steps.builder.outputs.name }} \
