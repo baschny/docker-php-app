@@ -22,10 +22,6 @@ jobs:
         uses: actions/checkout@v2
 
       -
-        name: "Set up QEMU"
-        uses: docker/setup-qemu-action@v1
-
-      -
         name: "Set up Docker Buildx"
         id: builder
         uses: docker/setup-buildx-action@v1
@@ -44,6 +40,10 @@ jobs:
 
           # Load ssh key allowing access to the remote docker
           eval $(ssh-agent -s)
+          echo "config:"
+          cat ~/.ssh/config
+          echo "\n-----\nLoading key:"
+          echo "$SSH_PRIVATE_KEY"
           ssh-add <(echo "$SSH_PRIVATE_KEY")
 
           # Append the arm node to the builder
