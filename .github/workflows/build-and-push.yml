@@ -34,6 +34,18 @@ jobs:
       - name: "Append ARM buildx builder from AWS"
         shell: bash
         run: |
+          # Do not check hostkey (for now)
+          cat <<EOF > ~/.ssh/config
+          Host *
+             StrictHostKeyChecking no
+             UserKnownHostsFile=/dev/null
+          EOF
+
+          # Load ssh key allowing access to the remote docker
+          eval $(ssh-agent -s)
+          ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+          # Append the arm node to the builder
           docker buildx create --append --name ${{ steps.builder.outputs.name }} \
               --node aws_graviton \
               --platform linux/arm64 \
