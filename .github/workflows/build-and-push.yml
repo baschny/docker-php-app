@@ -40,11 +40,7 @@ jobs:
 
           # Load ssh key allowing access to the remote docker
           eval $(ssh-agent -s)
-          echo "config:"
-          cat ~/.ssh/config
-          echo "\n-----\nLoading key:"
-          echo "$SSH_PRIVATE_KEY"
-          ssh-add <(echo "$SSH_PRIVATE_KEY")
+          ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
 
           # Append the arm node to the builder
           docker buildx create --append --name ${{ steps.builder.outputs.name }} \
