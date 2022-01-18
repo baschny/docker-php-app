@@ -12,7 +12,9 @@ jobs:
 
     strategy:
       matrix:
-        php-version: [7.4]
+        include:
+          - php-version: 7.4
+            node-version: 14
 
     steps:
       -
@@ -41,11 +43,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .buildx-cache
-          key: ${{ runner.os }}-buildx-${{ matrix.php-version }}-${{ matrix.target }}-${{ github.sha }}
-          restore-keys:
-            - ${{ runner.os }}-buildx-${{ matrix.php-version }}-${{ matrix.target }}-
-            - ${{ runner.os }}-buildx-${{ matrix.php-version }}-
-            - ${{ runner.os }}-buildx-
+          key: ${{ runner.os }}-buildx-${{ matrix.php-version }}-${{ matrix.node-version }}-${{ github.sha }}
+          restore-keys: |
+            "${{ runner.os }}-buildx-${{ matrix.php-version }}-${{ matrix.node-version }}-"
+            "${{ runner.os }}-buildx-${{ matrix.php-version }}-"
+            "${{ runner.os }}-buildx-"
 
       -
         name: "Login to DockerHub"
@@ -55,5 +57,5 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       -
-        name: "Docker BuildX ${{ matrix.php-version }} (build and push)"
-        run: make build-php PUSH=--push PHP_VERSION=7.4 NODE_VERSION=14
+        name: "Docker build and push php-${{ matrix.php-version }} node-${{ matrix.node-version }}"
+        run: make build-php PUSH=--push PHP_VERSION=${{ matrix.php-version }} NODE_VERSION=${{ matrix.node-version }}
