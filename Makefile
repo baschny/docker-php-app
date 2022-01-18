@@ -29,7 +29,7 @@ build-db:
 		--build-arg MARIADB_VERSION=$(MARIADB_VERSION) --tag croneu/phpapp-db:mariadb-$(MARIADB_VERSION) mariadb
 
 build-php:
-	ssh-key -l
+	ssh-add -l
 	env | sort
 	docker buildx build $(DOCKER_CACHE) $(BUILDX_OPTIONS) \
 		--platform $(PLATFORMS) \
