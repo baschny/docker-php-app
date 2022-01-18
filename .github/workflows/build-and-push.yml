@@ -41,7 +41,7 @@ jobs:
           # Load ssh key allowing access to the remote docker
           eval $(ssh-agent -s)
           ssh-add <(echo "${{ secrets.SSH_PRIVATE_KEY }}")
-          echo "::set-env name=SSH_AUTH_SOCK::$SSH_AUTH_SOCK"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $GITHUB_ENV
 
           # Append the arm node to the builder
           docker buildx create --append --name ${{ steps.builder.outputs.name }} \
